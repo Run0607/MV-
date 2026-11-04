@@ -3,3 +3,4 @@ node_modules/
 *.wav
 *.mp3
 .DS_Store
+pose_sheet_honke.png

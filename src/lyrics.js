@@ -34,22 +34,22 @@
   // ---------------- 1番Aメロ ----------------
   center(13.62, 14.0, '〈コール〉', 300, 120);
   rows(14.0, 16.67, [{ text: '〈A1-1上〉', y: TOP }, { text: '〈A1-1下〉', y: BOT, at: 1.0 }]);
-  rows(16.67, 18.83, [{ text: '〈A1-2〉', y: MID, max: 200 }]);
+  rows(16.67, 18.83, [{ text: '〈A1-2〉', y: MID, max: 250 }]);
   rows(18.83, 21.96, [{ text: '〈A1-3上〉', y: TOP }, { text: '〈A1-3下〉', y: BOT, at: 1.71, color: 'black' }]);
   rows(21.96, 26.58, [{ text: '〈A1-4上〉', y: TOP }, { text: '〈A1-4下〉', y: BOT, at: 1.87 }]);
   rows(29.83, 32.71, [{ text: '〈A1-5上〉', y: TOP }, { text: '〈A1-5下〉', y: BOT, at: 0.17 }]);
   rows(32.71, 34.83, [{ text: '〈A1-6〉', y: TOP + 30 }]);
-  rows(34.83, 38.12, [{ text: '〈A1-7〉', y: TOP }, { text: '〈A1-8〉', y: MID + 40, at: 2.5, max: 240, color: 'black' }]);
-  rows(38.12, 40.79, [{ text: '〈A1-9〉', y: 300, max: 190, color: 'black' }]);
+  rows(34.83, 38.12, [{ text: '〈A1-7〉', y: TOP }, { text: '〈A1-8〉', y: MID + 40, at: 2.5, max: 260, color: 'black' }]);
+  rows(38.12, 40.79, [{ text: '〈A1-9〉', y: 300, max: 250, color: 'black' }]);
 
   // ---------------- サビ（1回目 / 2回目）----------------
   function chorus(C, n) {
     const k = (s) => `〈サビ${n}-${s}〉`;
     rows(C + 0, C + 2.05, [{ text: k('1上'), y: TOP }, { text: k('1下'), y: BOT, at: 1.0 }]);
     rows(C + 2.05, C + 3.63, [{ text: k('2'), y: TOP }]);
-    rows(C + 3.63, C + 5.21, [{ text: k('3'), y: 300, color: 'pink', max: 200 }]);
+    rows(C + 3.63, C + 5.21, [{ text: k('3'), y: 300, color: 'pink', max: 250 }]);
     rows(C + 5.21, C + 7.92, [{ text: k('4上'), y: TOP }, { text: k('4下'), y: BOT, at: 1.96 }]);
-    rows(C + 8.92, C + 10.55, [{ text: k('5上'), y: TOP + 20, max: 220 }, { text: k('5下'), y: BOT + 40, max: 220, color: 'black' }]);
+    rows(C + 8.92, C + 10.55, [{ text: k('5上'), y: TOP + 20, max: 250 }, { text: k('5下'), y: BOT + 40, max: 220, color: 'black' }]);
     rows(C + 10.55, C + 12.71, [{ text: k('6上'), y: TOP }, { text: k('6下'), y: BOT, at: 1.04 }]);
     rows(C + 12.71, C + 14.55, [{ text: k('7'), y: TOP }]);
     rows(C + 14.55, C + 15.88, [{ text: k('8'), y: TOP }]);
@@ -65,7 +65,7 @@
 
   // ---------------- 間奏「ダダダダ天使」 ----------------
   for (const [a, b] of [[94.2, 104.75], [204.46, 211.0]]) {
-    rows(a, b, [{ text: 'ダダダダ', y: 115, max: 200, noPop: true, x0: 30, x1: 1250 }, { text: '天使', y: 330, max: 260, x0: -260, x1: 1540 }]);
+    rows(a, b, [{ text: 'ダダダダ', y: 115, max: 200, noPop: true, x0: 30, x1: 1250 }, { text: '天　　　　　使', y: 340, max: 300, x0: 20, x1: 1260 }]);
   }
 
   // ---------------- 2番Aメロ ----------------
@@ -76,14 +76,14 @@
 
   // ---------------- Cメロ（頭身高め） ----------------
   rows(147.33, 149.46, [{ text: '〈C-1〉', y: 110, x0: 40, x1: 640 }]);
-  rows(149.46, 151.21, [{ text: '〈C-2〉', y: 560, color: 'pink', max: 200 }]);
+  rows(149.46, 151.21, [{ text: '〈C-2〉', y: 560, color: 'pink', max: 250 }]);
   rows(152.54, 156.5, [{ text: '〈C-3上〉', y: 110 }, { text: '〈C-3下〉', y: 600, at: 1.92, color: 'pink' }]);
-  rows(156.5, 157.79, [{ text: '〈C-4上〉', y: 160, color: 'pink', max: 230 }, { text: '〈C-4下〉', y: 560, color: 'pink', max: 230 }]);
+  rows(156.5, 157.79, [{ text: '〈C-4上〉', y: 160, color: 'pink', max: 260 }, { text: '〈C-4下〉', y: 560, color: 'pink', max: 260 }]);
   scroll(157.79, 160.67, 'グルグル', 110, 110, 'white', 520);
   scroll(159.17, 160.67, '〈C-5〉', 600, 110, 'pink', 640);
   rows(160.67, 163.08, [{ text: '〈C-6〉', y: 110 }]);
   rows(163.08, 166.62, [{ text: '〈C-7上〉', y: 150, color: 'pink' }, { text: '〈C-7下〉', y: 580, color: 'pink' }]);
-  rows(166.62, 168.4, [{ text: '〈C-8〉', y: 580, color: 'pink', max: 210 }]);
+  rows(166.62, 168.4, [{ text: '〈C-8〉', y: 580, color: 'pink', max: 250 }]);
 
   // ---------------- エンド ----------------
   center(211.0, 213.67, MV.CONFIG.thanks, 360, 64, 'white');

@@ -29,7 +29,7 @@
     for (const [k, v] of Object.entries(MV.PROPPARTS || {})) jobs.push(load(k, svgURL(v)));
     await Promise.all(jobs);
     await Promise.all([
-      document.fonts.load('100px "Dela"', 'ダ天使あ'),
+      document.fonts.load('100px "MP1"', 'ダ天使あ'),
       document.fonts.load('100px "MaruB"', 'ダ天使あ'),
       document.fonts.load('100px "MaruK"', 'ダ天使あ'),
     ]);

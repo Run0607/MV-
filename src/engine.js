@@ -33,7 +33,9 @@
   MV.TXT = TXT;
 
   // ---- 文字 ---------------------------------------------------------
-  const FONT_BIG = '"Dela", "MaruK", sans-serif';
+  const FONT_BIG = '"MP1", "MaruK", sans-serif';
+  const CX = 0.62;   // 本家っぽい縦長（横を詰める）
+  MV.CX = CX;
   const FONT_MARU = '"MaruK", sans-serif';
   MV.FONT_BIG = FONT_BIG; MV.FONT_MARU = FONT_MARU;
 
@@ -47,6 +49,7 @@
     ctx.translate(x, y);
     ctx.scale(s, s);
     if (opt.rot) ctx.rotate(opt.rot);
+    if (!opt.font || opt.font === FONT_BIG) ctx.scale(opt.cx ?? CX, 1);
     ctx.globalAlpha *= clamp(p * 2.5);
     ctx.font = `${size}px ${opt.font || FONT_BIG}`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -61,18 +64,23 @@
   // 横幅いっぱいに均等割りで並べる（本家っぽい巨大文字）
   function spreadLine(ctx, text, y, lt, color, opt = {}) {
     const chars = [...text];
-    const x0 = opt.x0 ?? 40, x1 = opt.x1 ?? W - 40;
-    const n = chars.length;
-    const step = (x1 - x0) / n;
-    const size = Math.min(opt.max || 180, step * (opt.fill || 0.98));
-    chars.forEach((ch, i) => popChar(ctx, ch, x0 + step * (i + 0.5), y, size, color, lt, i, opt));
+    const x0 = opt.x0 ?? 30, x1 = opt.x1 ?? W - 30;
+    // 自然な字幅で並べて、横幅いっぱいになるサイズを求める
+    ctx.font = `100px ${FONT_BIG}`;
+    const adv = chars.map((c) => ctx.measureText(c).width * CX * (/[ぁぃぅぇぉっゃゅょァィゥェォッャュョ]/.test(c) ? 0.9 : 1));
+    const tot = adv.reduce((a, b) => a + b, 0) || 1;
+    let size = Math.min(opt.max || 300, ((x1 - x0) / tot) * 100);
+    const used = (tot * size) / 100;
+    let x = x0 + ((x1 - x0) - used) / 2;
+    chars.forEach((ch, i) => { const w = (adv[i] * size) / 100; popChar(ctx, ch, x + w / 2, y, size, color, lt, i, opt); x += w; });
     return size;
   }
   // 中央寄せ1行（自動縮小）
   function centerLine(ctx, text, x, y, lt, color, size, maxW, opt = {}) {
     ctx.font = `${size}px ${opt.font || FONT_BIG}`;
     const chars = [...text];
-    let w = 0; const ws = chars.map((c) => { const m = ctx.measureText(c).width; w += m; return m; });
+    const cx = (!opt.font || opt.font === FONT_BIG) ? CX : 1;
+    let w = 0; const ws = chars.map((c) => { const m = ctx.measureText(c).width * cx; w += m; return m; });
     const sp = opt.spacing || 0;
     w += sp * (chars.length - 1);
     let sc = 1; if (w > maxW) sc = maxW / w;

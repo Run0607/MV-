@@ -149,10 +149,10 @@
     ctx.textBaseline = 'middle'; ctx.textAlign = 'center';
     for (let i = -1; i < 4; i++) {
       const x = i * P - off;
-      ctx.font = `150px ${MV.FONT_BIG}`;
-      ctx.fillText(head, x + P / 2, 96);
-      ctx.font = `300px ${MV.FONT_BIG}`;
-      ctx.fillText(tail[0], x + P * 0.25, 350); ctx.fillText(tail[1], x + P * 0.75, 350);
+      ctx.save(); ctx.translate(x + P / 2, 100); ctx.scale(MV.CX, 1);
+      ctx.font = `190px ${MV.FONT_BIG}`; ctx.fillText(head, 0, 0); ctx.restore();
+      ctx.font = `330px ${MV.FONT_BIG}`;
+      for (const [ch, fx] of [[tail[0], 0.25], [tail[1], 0.75]]) { ctx.save(); ctx.translate(x + P * fx, 350); ctx.scale(MV.CX, 1); ctx.fillText(ch, 0, 0); ctx.restore(); }
     }
     ctx.restore();
     // 歌い手名
@@ -326,7 +326,7 @@
         for (const r of l.rows) {
           const rt = lt - (r.at || 0);
           if (rt < 0) continue;
-          MV.spreadLine(ctx, r.text, r.y, rt, MV.TXT[r.color || 'white'], { max: r.max || 175, x0: r.x0, x1: r.x1, noPop: r.noPop });
+          MV.spreadLine(ctx, r.text, r.y, rt, MV.TXT[r.color || 'white'], { max: r.max || 165, x0: r.x0, x1: r.x1, noPop: r.noPop });
         }
       } else if (l.style === 'center') {
         MV.centerLine(ctx, l.text, 640, l.y, lt, MV.TXT[l.color || 'white'], l.size, 1200);
@@ -334,9 +334,10 @@
         ctx.save();
         ctx.font = `${l.size}px ${MV.FONT_BIG}`; ctx.fillStyle = MV.TXT[l.color || 'white'];
         ctx.textBaseline = 'middle';
+        ctx.scale(MV.CX, 1);
         const tw = ctx.measureText(l.text + '　').width;
-        const off = (lt * l.speed) % tw;
-        for (let x = -off; x < W + tw; x += tw) ctx.fillText(l.text + '　', x, l.y);
+        const off = (lt * l.speed / MV.CX) % tw;
+        for (let x = -off; x < W / MV.CX + tw; x += tw) ctx.fillText(l.text + '　', x, l.y);
         ctx.restore();
       }
     }
