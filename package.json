@@ -1,0 +1,12 @@
+{
+  "name": "dadada-tenshi-mv-kuro",
+  "private": true,
+  "description": "黒キャラ版 MV（ブラウザで再生・mp4書き出し）",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "render": "node render/render.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}

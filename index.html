@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ダダダダ天使 MV（黒キャラ版）</title>
+<link rel="stylesheet" href="src/fonts.css">
+<style>
+  :root { --bg: #101014; --panel: #1b1b22; --fg: #eee; --accent: #47e4e4; --pink: #ff4fae; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: "MaruB", system-ui, sans-serif; }
+  #stage { display: flex; justify-content: center; align-items: center; padding: 12px 16px 0; }
+  canvas { width: min(100%, calc((100vh - 120px) * 16 / 9)); aspect-ratio: 16 / 9; background: #000; display: block; border-radius: 6px; }
+  #bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; padding: 10px 16px; }
+  button, label.btn { background: var(--panel); color: var(--fg); border: 1px solid #333; border-radius: 6px; padding: 6px 12px; cursor: pointer; font: inherit; }
+  button:hover, label.btn:hover { border-color: var(--accent); }
+  #seek { flex: 1 1 320px; accent-color: var(--pink); }
+  #time { font-variant-numeric: tabular-nums; min-width: 120px; text-align: center; }
+  input[type=number] { width: 70px; background: var(--panel); color: var(--fg); border: 1px solid #333; border-radius: 6px; padding: 4px; }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: var(--bg); font-size: 20px; }
+  body.render #bar, body.render #loading { display: none; }
+  body.render #stage { padding: 0; }
+  body.render canvas { width: 1280px; border-radius: 0; }
+</style>
+</head>
+<body>
+<div id="loading">読み込み中…</div>
+<div id="stage"><canvas id="cv" width="1280" height="720"></canvas></div>
+<div id="bar">
+  <button id="play">▶ 再生</button>
+  <input id="seek" type="range" min="0" max="218.7" step="0.01" value="0">
+  <span id="time">0:00.00</span>
+  <label class="btn">♪ 音源を選ぶ<input id="file" type="file" accept="audio/*,video/*" hidden></label>
+  <label>音ズレ補正(秒) <input id="offset" type="number" step="0.01" value="0"></label>
+</div>
+
+<script>window.MV = window.MV || {};</script>
+<script src="src/engine.js"></script>
+<script src="src/art.js"></script>
+<script src="src/kuro.js"></script>
+<script src="src/mobs.js"></script>
+<script src="src/props.js"></script>
+<script src="src/lyrics.js"></script>
+<script src="src/timeline.js"></script>
+<script src="src/loader.js"></script>
+<script>
+(async () => {
+  const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+  if (new URLSearchParams(location.search).has('render')) document.body.classList.add('render');
+  await MV.loadAll();
+  MV.initBackgrounds();
+  document.getElementById('loading').remove();
+
+  // 書き出し用 API
+  window.renderFrame = (t) => { MV.renderAt(ctx, t); };
+  window.MV_READY = true;
+
+  const DUR = 218.7;
+  const audio = new Audio();
+  let playing = false, clock0 = 0, pos = 0;
+  const seek = document.getElementById('seek'), timeEl = document.getElementById('time'), playBtn = document.getElementById('play');
+  const offEl = document.getElementById('offset');
+  const fmt = (t) => `${Math.floor(t / 60)}:${(t % 60).toFixed(2).padStart(5, '0')}`;
+
+  function now() {
+    if (!playing) return pos;
+    if (audio.src) return audio.currentTime - (+offEl.value || 0);
+    return pos + (performance.now() - clock0) / 1000;
+  }
+  function setPos(t) {
+    pos = Math.max(0, Math.min(DUR, t));
+    if (audio.src) audio.currentTime = Math.max(0, pos + (+offEl.value || 0));
+    clock0 = performance.now();
+  }
+  function play() {
+    playing = !playing;
+    playBtn.textContent = playing ? '❚❚ 停止' : '▶ 再生';
+    if (playing) { setPos(pos); if (audio.src) audio.play(); }
+    else { pos = now(); if (audio.src) audio.pause(); }
+  }
+  playBtn.onclick = play;
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { e.preventDefault(); play(); }
+    if (e.code === 'ArrowLeft') setPos(now() - 2);
+    if (e.code === 'ArrowRight') setPos(now() + 2);
+  });
+  seek.oninput = () => { const wasPlaying = playing; if (playing) play(); setPos(+seek.value); if (wasPlaying) play(); };
+  document.getElementById('file').onchange = (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    audio.src = URL.createObjectURL(f);
+  };
+
+  function loop() {
+    let t = now();
+    if (t >= DUR) { if (playing) play(); t = pos = DUR; }
+    MV.renderAt(ctx, t);
+    seek.value = t; timeEl.textContent = fmt(t);
+    requestAnimationFrame(loop);
+  }
+  const q = new URLSearchParams(location.search).get('t');
+  if (q) pos = +q;
+  if (!document.body.classList.contains('render')) loop();
+})();
+</script>
+</body>
+</html>
