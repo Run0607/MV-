@@ -2,6 +2,7 @@
 (function () {
   const MV = (window.MV = window.MV || {});
   const OL = '#2a2433';
+  const svgWrap = (body, w, h, scale = 1) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w * scale}" height="${h * scale}">${body}</svg>`;
   const st = (w = 4) => `stroke="${OL}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round"`;
 
   function room() {
@@ -48,7 +49,7 @@
   }
 
   const P = {};
-  P.room = MV.svgWrap(room(), 1280, 720, 1);
+  P.room = svgWrap(room(), 1280, 720, 1);
   MV.PROPPARTS = P;
   MV.TV_SCREEN = { x: 880 + 26, y: 348 + 34, w: 210, h: 176, r: 24 };
 })();

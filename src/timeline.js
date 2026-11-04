@@ -33,34 +33,35 @@
   const shot = (a, b, type, p = {}) => SHOTS.push(Object.assign({ a, b, type }, p));
 
   // 顔アップ寸劇（イントロ / 2回目 / ラスト）
+  // F=顔中心, E=目元, B=バスト（画像座標）
+  const F = [258, 228], EY = [258, 214], BU = [262, 320];
   function skit(t0, kind) {
     const o = (x) => t0 + x;
     if (kind === 'intro' || kind === 'mid') {
       const e = kind === 'intro' ? 0.62 : 0.42;
-      shot(o(0), o(e), 'head', { s: [5.4, 5.6], y: 190, expr: kind === 'intro' ? 'closed' : 'normal' });
-      shot(o(e), o(1.0), 'head', { s: [4.7, 4.8], y: 200, expr: 'up', bg: 'mint' });
-      shot(o(1.0), o(1.37), 'head', { s: [4.4, 4.5], y: 210, expr: (t) => flap(t, 'grin', 'angry', 8), bg: 'mint' });
-      shot(o(1.37), o(2.0), 'head', { s: [3.9, 3.7], y: 230, expr: (t) => flap(t), bg: 'mint' });
-      shot(o(2.0), o(2.62), 'head', { s: [2.3, 2.15], y: 290, expr: (t) => flap(t, 'talk', 'shock'), bg: 'mint', body: true });
-      shot(o(2.62), o(3.0), 'head', { s: [1.75, 1.7], y: 330, expr: 'smugOpen', bg: 'mint', body: true, pose: 'fist' });
-      shot(o(3.0), o(kind === 'intro' ? 3.33 : 3.0), 'head', { s: [1.7, 1.65], y: 330, expr: 'smug', bg: 'mint', body: true, pose: 'fist', doya: o(2.87) });
+      shot(o(0), o(e), 'head', { s: [3.3, 3.45], f: EY, y: 330 });
+      shot(o(e), o(1.0), 'head', { s: [3.0, 3.05], f: EY, y: 340, punch: true });
+      shot(o(1.0), o(1.37), 'head', { s: [2.8, 2.85], f: F, y: 380, punch: true, shake: true });
+      shot(o(1.37), o(2.0), 'head', { s: [2.6, 2.5], f: F, y: 380 });
+      shot(o(2.0), o(2.62), 'head', { s: [1.75, 1.65], f: BU, y: 420, wings: true, punch: true });
+      shot(o(2.62), o(kind === 'intro' ? 3.33 : 3.0), 'head', { s: [1.35, 1.3], f: BU, y: 440, wings: true, doya: o(2.87), punch: true });
     }
     if (kind === 'last') {
-      shot(o(0), o(0.43), 'head', { s: [5.4, 5.6], y: 190, expr: 'closed' });
-      shot(o(0.43), o(1.43), 'head', { s: [4.6, 4.4], y: 200, expr: (t) => flap(t, 'talk', 'normal'), bg: 'mint' });
-      shot(o(1.43), o(2.1), 'head', { s: [4.2, 4.0], y: 210, expr: (t) => flap(t, 'talk', 'shock'), bg: 'mint' });
-      shot(o(2.1), o(2.98), 'head', { s: [3.6, 3.5], y: 240, expr: 'smugOpen', bg: 'mint', doya: o(2.15), shake: true });
-      shot(o(2.98), o(3.98), 'head', { s: [1.9, 1.85], y: 320, expr: 'worry', bg: 'clouds', body: true, pose: 'down' });
-      shot(o(3.98), o(5.02), 'head', { s: [3.4, 3.3], y: 240, expr: (t) => flap(t, 'grin', 'angry', 6), bg: 'clouds' });
-      shot(o(5.02), o(6.56), 'head', { s: [1.75, 1.7], y: 360, expr: 'smugOpen', bg: 'mint', body: true, pose: 'fist', doya: o(5.1), doya2: o(5.6) });
+      shot(o(0), o(0.43), 'head', { s: [3.3, 3.45], f: EY, y: 330 });
+      shot(o(0.43), o(1.43), 'head', { s: [3.0, 2.9], f: EY, y: 340, punch: true });
+      shot(o(1.43), o(2.1), 'head', { s: [2.7, 2.6], f: F, y: 380 });
+      shot(o(2.1), o(2.98), 'head', { s: [2.5, 2.4], f: F, y: 390, doya: o(2.15), shake: true, punch: true });
+      shot(o(2.98), o(3.98), 'head', { s: [1.5, 1.45], f: BU, y: 440, bg: 'clouds', wings: true });
+      shot(o(3.98), o(5.02), 'head', { s: [2.6, 2.5], f: F, y: 380, bg: 'clouds', shake: true, punch: true });
+      shot(o(5.02), o(6.56), 'head', { s: [1.3, 1.25], f: BU, y: 450, wings: true, doya: o(5.1), doya2: o(5.6), punch: true });
     }
   }
   skit(0, 'intro');
   shot(3.33, 13.0, 'dance', { bg: 'mint', popIn: true, title: true });
   shot(13.0, 40.79, 'dance', { bg: 'mint' });
   shot(40.79, 59.33, 'room', { part: 1 });
-  shot(59.33, 61.0, 'head', { s: [5.0, 4.4], y: 200, expr: 'closed', bg: 'mint' });
-  shot(61.0, 62.12, 'head', { s: [2.1, 2.0], y: 320, expr: 'talk', bg: 'mint', body: true, pose: 'down' });
+  shot(59.33, 61.0, 'head', { s: [3.2, 2.9], f: EY, y: 340 });
+  shot(61.0, 62.12, 'head', { s: [1.7, 1.65], f: BU, y: 430, wings: true, punch: true });
   shot(62.12, 83.0, 'dance', { bg: 'clouds', zoomIn: true, hearts: true });
   realSection(83.0);
   skit(91.2, 'mid');
@@ -68,8 +69,8 @@
   shot(104.75, 114.79, 'dance', { bg: 'mint' });
   shot(114.79, 124.67, 'talk2b');
   shot(124.67, 144.67, 'room', { part: 2 });
-  shot(144.67, 146.0, 'head', { s: [5.0, 4.5], y: 200, expr: 'closed', bg: 'mint' });
-  shot(146.0, 147.33, 'head', { s: [2.2, 2.1], y: 320, expr: 'smile', bg: 'mint', body: true, pose: 'down' });
+  shot(144.67, 146.0, 'head', { s: [3.2, 2.95], f: EY, y: 340 });
+  shot(146.0, 147.33, 'head', { s: [1.7, 1.65], f: BU, y: 430, wings: true, punch: true });
   // Cメロ（頭身高め＝リアル絵）
   shot(147.33, 149.46, 'real', { mode: 'circle', rot: [-4, 4], z: [1.0, 1.08] });
   shot(149.46, 151.21, 'real', { mode: 'crop', c: [520, 770], s: [1.3, 1.42] });
@@ -110,13 +111,13 @@
   H_.head = function (ctx, t, lt, sh, mid) {
     const p = lt / (sh.b - sh.a);
     bg(ctx, t, sh.bg || 'mint');
+    if (sh.s[0] < 2) MV.floatHearts(ctx, t, 13, 4, 'rgba(255,255,255,.7)');
     mid();
-    const s = lerp(sh.s[0], sh.s[1], E.inOut(clamp(p)));
-    const expr = typeof sh.expr === 'function' ? sh.expr(t) : sh.expr;
-    let x = sh.x ?? 640, y = sh.y ?? 300;
-    if (sh.shake) { x += Math.sin(t * 90) * 6 * (1 - clamp(lt / 0.4)); y += Math.cos(t * 77) * 5 * (1 - clamp(lt / 0.4)); }
-    const pose = sh.pose || (sh.body ? 'down' : null);
-    MV.drawKuroHead(ctx, { x, y, scale: s, expr, noBody: !sh.body && !sh.pose, pose, rot: Math.sin(t * 2) * 1.2 });
+    let s = lerp(sh.s[0], sh.s[1], E.inOut(clamp(p)));
+    if (sh.punch) s *= 1 + 0.06 * (1 - E.out(clamp(lt / 0.18)));
+    let x = sh.x ?? 640, y = sh.y ?? 360;
+    if (sh.shake) { const k = 1 - clamp(lt / 0.45); x += Math.sin(t * 90) * 9 * k; y += Math.cos(t * 77) * 7 * k; }
+    MV.drawKuroShot(ctx, { x, y, scale: s, focus: sh.f, t, wings: sh.wings, sway: sh.s[0] < 2 ? 0.6 : 0.3 });
     if (sh.doya != null && t >= sh.doya) MV.sfxText(ctx, 'ドヤ!', 90, 170, 120, t - sh.doya, -0.25);
     if (sh.doya2 != null && t >= sh.doya2) MV.sfxText(ctx, 'ドヤ!', 1000, 120, 100, t - sh.doya2, 0.2);
   };
@@ -128,13 +129,13 @@
     if (sh.title) titleScroll(ctx, t, lt);
     mid();
     const k = keyAt(KK, t);
-    let sc = 1.0, y = 712;
+    let sc = 1.0, y = 714;
     if (sh.popIn) sc *= lerp(0.15, 1, E.outBack(clamp(lt / 0.35)));
     if (sh.zoomIn) sc *= lerp(0.55, 1, E.outQuint(clamp(lt / 0.3)));
     // 同じポーズに入った瞬間に軽いバウンス
     const since = t - k[0];
     const kick = since < 0.15 ? Math.sin((since / 0.15) * Math.PI) * 0.03 : 0;
-    MV.drawKuro(ctx, { x: 640, y, scale: sc * (1 + kick), pose: k[1], expr: k[2], t, blinkSeed: 0.7 });
+    MV.drawKuro(ctx, { x: 640, y, scale: sc * (1 + kick), t });
     if (sh.title) credits(ctx, t);
   };
 
@@ -179,7 +180,7 @@
       if (t >= 131.25 && t < 133.88) {
         MV.bgRoom(ctx, t, 0.35);
         mid();
-        MV.drawKuroHead(ctx, { x: 470, y: 330, scale: lerp(2.6, 2.5, prog(t, 131.25, 2.6)), expr: flap(t, 'talk', 'normal', 6), pose: 'down' });
+        MV.drawKuroShot(ctx, { x: 470, y: 400, scale: lerp(1.9, 1.8, prog(t, 131.25, 2.6)), focus: [262, 300], t, sway: 0.2 });
         return;
       }
     }
@@ -189,7 +190,7 @@
     // キャラ（シルエット化対応）
     const off = MV.cache.off, oc = off.getContext('2d');
     oc.setTransform(1, 0, 0, 1, 0, 0); oc.clearRect(0, 0, W, H);
-    MV.drawKuro(oc, { x: 640, y: 700, scale: 0.84, sit: true, expr, t, dance: 0, halo, headTilt: head });
+    MV.drawKuro(oc, { x: 640, y: 700, scale: 0.8, t, dance: 0.12, halo, wingFlap: 0.3 });
     if (sil > 0) {
       oc.globalCompositeOperation = 'source-atop';
       oc.fillStyle = `rgba(8,6,12,${sil})`; oc.fillRect(0, 0, W, H);
@@ -199,10 +200,10 @@
     // ハート
     if (sh.part === 1 && t >= 55.0) {
       const pp = E.outBack(prog(t, 55.0, 0.25));
-      if (t < 56.0) { ctx.save(); MV.heartPath(ctx, 640, 150, 44 * pp); ctx.fillStyle = '#17141d'; ctx.fill(); ctx.restore(); }
-      else MV.glitterHeart(ctx, 640, 150 + Math.sin(t * 3) * 6, 48, t);
+      if (t < 56.0) { ctx.save(); MV.heartPath(ctx, 630, 110, 44 * pp); ctx.fillStyle = '#17141d'; ctx.fill(); ctx.restore(); }
+      else MV.glitterHeart(ctx, 630, 110 + Math.sin(t * 3) * 6, 48, t);
     }
-    if (sh.part === 2 && t >= 139.5) MV.glitterHeart(ctx, 640, 545, 44 * E.outBack(prog(t, 139.5, 0.5)), t);
+    if (sh.part === 2 && t >= 139.5) MV.glitterHeart(ctx, 662, 470, 40 * E.outBack(prog(t, 139.5, 0.5)), t);
     ctx.restore();
     if (dark > 0) { ctx.fillStyle = `rgba(22,18,44,${dark})`; ctx.fillRect(0, 0, W, H); }
     mid();
@@ -240,15 +241,10 @@
       ctx.restore();
     }
     mid();
-    let expr = flap(t);
-    if (t >= 116.62 && t < 117.92) expr = flap(t, 'angry', 'grin', 6);
-    else if (t >= 117.92 && t < 119.17) expr = 'grin';
-    else if (t >= 119.17 && t < 120.67) expr = 'pout';
-    else if (t >= 121.7 && t < 122.9) expr = flap(t, 'angry', 'grin', 6);
-    else if (t >= 122.9 && t < 124.0) expr = 'grin';
-    else if (t >= 124.0) expr = 'pout';
+    const angry = (t >= 116.62 && t < 119.17) || (t >= 121.7 && t < 124.0);
+    const sh2 = angry ? Math.sin(t * 70) * 5 : 0;
     const bob = Math.abs(Math.sin(t * Math.PI * MV.BPS / 2)) * 8;
-    MV.drawKuroHead(ctx, { x: 640, y: 470 - bob, scale: 1.9, expr, pose: 'down', rot: Math.sin(t * 1.5) * 2 });
+    MV.drawKuroShot(ctx, { x: 640 + sh2, y: 440 - bob, scale: darkBg ? 1.75 : 1.6, focus: [262, 300], t, sway: 0.3, wings: true });
   };
 
   // リアル絵（頭身高めパート）
@@ -314,8 +310,8 @@
     const a = clamp(lt / 0.3) * (1 - clamp((lt - 1.6) / 0.5));
     if (a <= 0) return;
     ctx.save(); ctx.globalAlpha = a;
-    ctx.beginPath(); ctx.arc(640, 360, 46, 0, Math.PI * 2); ctx.fillStyle = MV.COL.mint; ctx.fill(); ctx.clip();
-    MV.drawKuroHead(ctx, { x: 640, y: 372, scale: 0.36, expr: 'smug', noBody: true });
+    ctx.beginPath(); ctx.arc(640, 360, 60, 0, Math.PI * 2); ctx.clip(); ctx.fillStyle = MV.COL.mint; ctx.fillRect(560, 280, 160, 160);
+    MV.drawKuroShot(ctx, { x: 640, y: 372, scale: 0.42, focus: [258, 228], t: 0, sway: 0 });
     ctx.restore();
   };
 
@@ -350,38 +346,30 @@
     for (const b of MV.BUBBLES) if (t >= b.a && t < b.b) MV.bubble(ctx, b, t - b.a);
   }
 
-  const MOB_LAYOUT = [
-    // key, x, scale, side
-    ['ao', 330, 0.62, -1], ['shiro', 950, 0.62, 1], ['taiyo', 120, 0.88, -1], ['gin', 1160, 0.88, 1],
-  ];
   function drawMobs(ctx, t) {
     for (const ev of MV.MOBEVENTS) {
       if (t < ev.a || t >= ev.b) continue;
       const lt = t - ev.a, rem = ev.b - t;
       if (ev.show) {
         const bi = Math.floor(t * MV.BPS);
-        MOB_LAYOUT.forEach(([key, x, sc, side], i) => {
-          const pose = ev.pose || (bi % 2 === 0 ? (key === 'ao' || key === 'shiro' ? 'cheeks' : 'fists') : 'up');
-          const im = MV.IMG[`mob_${key}_${pose}`];
-          const w = 400 * sc, h = 440 * sc;
-          const enter = clamp(lt / 0.12), exit = clamp(rem / 0.1);
-          const yOff = (1 - E.out(enter)) * 160 + (1 - exit) * 120;
-          const hop = Math.abs(Math.sin(t * Math.PI * MV.BPS)) * 10;
-          const bx = x - w / 2, by = H - h + 30 - hop + yOff;
-          // 入りのブレ（モーションブラー）
+        const pose = ev.pose === 'fists' ? 'ch' : (bi % 2 === 0 ? 'ch' : 'up');
+        const enter = clamp(lt / 0.12), exit = clamp(rem / 0.1);
+        const dy = (1 - E.out(enter)) * 200 + (1 - exit) * 150 - Math.abs(Math.sin(t * Math.PI * MV.BPS)) * 8;
+        for (const side of ['L', 'R']) {
+          const sgn = side === 'L' ? -1 : 1;
           if (enter < 1) {
             ctx.save(); ctx.globalAlpha = 0.25;
-            for (let k = 1; k <= 3; k++) ctx.drawImage(im, bx - side * k * 26 * (1 - enter), by, w, h);
+            for (let k = 1; k <= 3; k++) MV.drawMobGroup(ctx, side, pose, { dy, dx: sgn * k * 30 * (1 - enter) });
             ctx.restore();
           }
-          ctx.drawImage(im, bx, by, w, h);
-        });
+          MV.drawMobGroup(ctx, side, pose, { dy });
+        }
       }
       if (ev.chant) {
         const txt = '＼' + ev.chant + '／';
-        const yy = ev.show ? 280 : 300;
-        MV.centerLine(ctx, txt, 230, yy, lt, '#17141d', 40, 360, { font: MV.FONT_MARU, stroke: '#fff', strokeW: 9, rot: -0.12, stagger: 0.015 });
-        MV.centerLine(ctx, txt, 1050, yy, lt, '#17141d', 40, 360, { font: MV.FONT_MARU, stroke: '#fff', strokeW: 9, rot: 0.12, stagger: 0.015 });
+        const yy = ev.show ? 300 : 300;
+        MV.centerLine(ctx, txt, 250, yy, lt, '#17141d', 40, 360, { font: MV.FONT_MARU, stroke: '#fff', strokeW: 9, rot: -0.12, stagger: 0.015 });
+        MV.centerLine(ctx, txt, 1030, yy, lt, '#17141d', 40, 360, { font: MV.FONT_MARU, stroke: '#fff', strokeW: 9, rot: 0.12, stagger: 0.015 });
       }
     }
   }
